@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'br.com.mentorama.Mod-01-Atividade' is invalid and this project uses 'br.com.mentorama.Mod01Atividade' instead.
+* The original package name 'br.com.mentorama.Mod-01-Atividade' is invalid and this project uses 'br.com.mentorama.Mod02Atividade' instead.
 
 # Getting Started
 

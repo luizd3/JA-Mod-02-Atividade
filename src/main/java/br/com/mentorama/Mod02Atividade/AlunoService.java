@@ -1,27 +1,22 @@
-package br.com.mentorama.Mod01Atividade;
+package br.com.mentorama.Mod02Atividade;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@RestController
-@RequestMapping("/alunos")
-public class CadastroAlunosController {
+public class AlunoService {
 
-    private final List<Aluno> listaAlunos;
+    private List<Aluno> listaAlunos;
 
-    // Construtor para definir e inicializar a lista de alunos:
-    public CadastroAlunosController() {
+    public AlunoService() {
         this.listaAlunos = new ArrayList<>();
     }
 
-    @GetMapping
-    public List<Aluno> findAll(@RequestParam(required = false) String nome, @RequestParam(required = false) Integer idade) {
+    public List<Aluno> findAll(String nome, Integer idade) {
         Stream<Aluno> listaAlunosStream = listaAlunos.stream();
         if (nome != null)
             listaAlunosStream = listaAlunosStream.filter(aln -> aln.getNome().contains(nome));
@@ -30,16 +25,14 @@ public class CadastroAlunosController {
         return listaAlunosStream.collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
-    public Aluno findById(@PathVariable("id") Integer id) {
+    public Aluno findById(Integer id) {
         return listaAlunos.stream()
                 .filter(aln -> aln.getId().equals(id))
                 .findFirst()
                 .orElse(null);
     }
 
-    @PostMapping
-    public ResponseEntity<String> add(@RequestBody final Aluno novoAluno) {
+    public ResponseEntity<String> add(Aluno novoAluno) {
         if (novoAluno.getId() == null) {
             novoAluno.setId(listaAlunos.size() + 1);
         }
@@ -47,8 +40,7 @@ public class CadastroAlunosController {
         return new ResponseEntity<>("Aluno cadastrado. ID: " + String.valueOf(novoAluno.getId()), HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<String> update(@RequestBody final Aluno atualizaAluno) {
+    public ResponseEntity<String> update(Aluno atualizaAluno) {
         listaAlunos.stream()
                 .filter(aln -> aln.getId().equals(atualizaAluno.getId()))
                 .forEach(aln -> {
@@ -58,8 +50,7 @@ public class CadastroAlunosController {
         return new ResponseEntity<>("Aluno ID " + atualizaAluno.getId() + " atualizado.", HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> delete(Integer id) {
         listaAlunos.removeIf(aln -> aln.getId().equals(id));
         return new ResponseEntity<>("Aluno ID " + id + " apagado da lista.", HttpStatus.ACCEPTED);
     }

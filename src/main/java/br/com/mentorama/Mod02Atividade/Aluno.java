@@ -1,4 +1,4 @@
-package br.com.mentorama.Mod01Atividade;
+package br.com.mentorama.Mod02Atividade;
 
 public class Aluno {
 
