@@ -10,26 +10,36 @@ import java.util.stream.Stream;
 
 public class AlunoService {
 
-    private List<Aluno> listaAlunos;
+    private final List<Aluno> listaAlunos;
 
     public AlunoService() {
         this.listaAlunos = new ArrayList<>();
     }
 
     public List<Aluno> findAll(String nome, Integer idade) {
-        Stream<Aluno> listaAlunosStream = listaAlunos.stream();
-        if (nome != null)
-            listaAlunosStream = listaAlunosStream.filter(aln -> aln.getNome().contains(nome));
-        if (idade != null)
-            listaAlunosStream = listaAlunosStream.filter(aln -> aln.getIdade().equals(idade));
-        return listaAlunosStream.collect(Collectors.toList());
+        if (nome != null) {
+            List<Aluno> listaAlunos= this.listaAlunos.stream()
+                    .filter(aln -> aln.getNome().contains(nome))
+                    .toList();
+            if (listaAlunos.isEmpty()) {
+                throw new AlunoNaoEncontradoException(nome);
+            } else {
+                return listaAlunos;
+            }
+        }
+        if (idade != null) {
+            return listaAlunos.stream()
+                    .filter(aln -> aln.getIdade().equals(idade))
+                    .collect(Collectors.toList());
+        }
+        return listaAlunos;
     }
 
     public Aluno findById(Integer id) {
         return listaAlunos.stream()
                 .filter(aln -> aln.getId().equals(id))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new AlunoNaoEncontradoException(id));
     }
 
     public ResponseEntity<String> add(Aluno novoAluno) {
