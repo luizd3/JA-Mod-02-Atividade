@@ -5,8 +5,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class AlunoService {
 
@@ -18,7 +16,7 @@ public class AlunoService {
 
     public List<Aluno> findAll(String nome, Integer idade) {
         if (nome != null) {
-            List<Aluno> listaAlunos= this.listaAlunos.stream()
+            List<Aluno> listaAlunos = this.listaAlunos.stream()
                     .filter(aln -> aln.getNome().contains(nome))
                     .toList();
             if (listaAlunos.isEmpty()) {
@@ -28,9 +26,14 @@ public class AlunoService {
             }
         }
         if (idade != null) {
-            return listaAlunos.stream()
+            List<Aluno> listaAlunos = this.listaAlunos.stream()
                     .filter(aln -> aln.getIdade().equals(idade))
-                    .collect(Collectors.toList());
+                    .toList();
+            if (listaAlunos.isEmpty()) {
+                throw new AlunoNaoEncontradoException();
+            } else {
+                return listaAlunos;
+            }
         }
         return listaAlunos;
     }

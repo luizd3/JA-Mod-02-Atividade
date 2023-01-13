@@ -8,4 +8,7 @@ public class AlunoNaoEncontradoException extends RuntimeException {
     public AlunoNaoEncontradoException(Integer id) {
         super("Aluno id " + id + " não encontrado.");
     }
+    public AlunoNaoEncontradoException() {
+        super("Aluno não encontrado.");
+    }
 }

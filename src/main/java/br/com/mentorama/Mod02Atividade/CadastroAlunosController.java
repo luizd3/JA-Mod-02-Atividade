@@ -13,18 +13,8 @@ public class CadastroAlunosController {
 
     @GetMapping
     public ResponseEntity<List<Aluno>> findAll(@RequestParam(required = false) String nome, @RequestParam(required = false) Integer idade) {
-        try {
-            return new ResponseEntity<>(alunoService.findAll(nome, idade), HttpStatus.OK);
-        } catch (AlunoNaoEncontradoException e) {
-            throw new AlunoNaoEncontradoException(nome);
-        }
+        return new ResponseEntity<>(alunoService.findAll(nome, idade), HttpStatus.OK);
     }
-
-    @ExceptionHandler({AlunoNaoEncontradoException.class})
-    public ResponseEntity<String> handle(final AlunoNaoEncontradoException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Aluno> findById(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(alunoService.findById(id), HttpStatus.OK);
@@ -41,5 +31,8 @@ public class CadastroAlunosController {
     public ResponseEntity<String> delete(@PathVariable("id") Integer id) {
         return alunoService.delete(id);
     }
-
+    @ExceptionHandler({AlunoNaoEncontradoException.class})
+    public ResponseEntity<String> handle(final AlunoNaoEncontradoException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }
